@@ -1,0 +1,32 @@
+# client-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cookie-clicker-client
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cookie-clicker-client
+  template:
+    metadata:
+      labels:
+        app: cookie-clicker-client
+    spec:
+      containers:
+      - name: cookie-clicker-client
+        image: <tu_usuario>/cookie-clicker-client
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cookie-clicker-client
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: cookie-clicker-client
