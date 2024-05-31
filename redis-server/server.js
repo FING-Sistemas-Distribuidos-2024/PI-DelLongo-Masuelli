@@ -23,22 +23,22 @@ client.connect().catch(console.error);
 app.post('/send', async (req, res) => {
   const message = req.body.message;
   try {
-    await client.set('message', message);
-    res.json({ status: 'Mensaje enviado a Redis' });
+    await client.lPush('messages', message); // Encolar el mensaje
+    res.json({ status: 'Mensaje encolado en Redis' });
   } catch (err) {
-    console.error('Error al enviar el mensaje a Redis:', err);
-    res.status(500).json({ status: 'Error al enviar el mensaje a Redis' });
+    console.error('Error al encolar el mensaje en Redis:', err);
+    res.status(500).json({ status: 'Error al encolar el mensaje en Redis' });
   }
 });
 
 // Ruta para recibir mensajes
 app.get('/receive', async (req, res) => {
   try {
-    const message = await client.get('message');
+    const message = await client.rPop('messages'); // Desencolar el mensaje
     res.json({ message });
   } catch (err) {
-    console.error('Error al recibir el mensaje de Redis:', err);
-    res.status(500).json({ status: 'Error al recibir el mensaje de Redis' });
+    console.error('Error al desencolar el mensaje de Redis:', err);
+    res.status(500).json({ status: 'Error al desencolar el mensaje de Redis' });
   }
 });
 
