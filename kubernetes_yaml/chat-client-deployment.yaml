@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatclient-deployment
+  labels:
+    app: chatclient
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: chatclient
+  template:
+    metadata:
+      labels:
+        app: chatclient
+    spec:
+      containers:
+      - name: chatclient-container
+        image: micakil/chat-client:0.1
+        ports:
+        - containerPort: 80
