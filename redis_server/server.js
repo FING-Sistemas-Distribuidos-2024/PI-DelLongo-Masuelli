@@ -9,17 +9,17 @@ app.use(cors()); // Habilitar CORS
 
 // cliente de Redis
 const client = createClient({
-  url: 'redis://10.230.110.13:6379' //<---------------------------------------------------------------------------
+  url: 'redis://10.230.50.101:6379' //<---------------------------------------------------------------------------
 });
 
 client.on('error', (err) => {
   console.error('Error de Redis:', err);
 });
 
-// Conectar el cliente de Redis
+// conectar el cliente de Redis
 client.connect().catch(console.error);
 
-// Ruta para enviar mensajes
+// ruta para enviar mensajes
 app.post('/send', async (req, res) => {
   const message = req.body.message;
   try {
@@ -31,7 +31,7 @@ app.post('/send', async (req, res) => {
   }
 });
 
-// Ruta para recibir mensajes
+// ruta para recibir mensajes
 app.get('/receive', async (req, res) => {
   try {
     const message = await client.get('message');
@@ -42,7 +42,7 @@ app.get('/receive', async (req, res) => {
   }
 });
 
-// Iniciar el servidor en el puerto 5000
+// iniciar el servidor en el puerto 5000
 app.listen(5000, () => {
   console.log('Servidor corriendo en el puerto 5000');
 });

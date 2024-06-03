@@ -7,7 +7,7 @@ function App() {
 
   const handleSendMessage = async () => {
     try {
-      const response = await axios.post('http://10.230.110.14:5000/send', { message });
+      const response = await axios.post('http://10.230.50.14:5000/send', { message });
       alert(response.data.status);
     } catch (error) {
       console.error('Error sending message:', error);
@@ -17,7 +17,7 @@ function App() {
 
   const handleReceiveMessage = async () => {
     try {
-      const response = await axios.get('http://10.230.110.14:5000/receive');
+      const response = await axios.get('http://10.230.50.14:5000/receive');
       setReceivedMessage(response.data.message);
     } catch (error) {
       console.error('Error receiving message:', error);
