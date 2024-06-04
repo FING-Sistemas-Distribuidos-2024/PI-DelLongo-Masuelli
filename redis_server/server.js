@@ -23,7 +23,7 @@ client.connect().catch(console.error);
 app.post('/send', async (req, res) => {
   const message = req.body.message;
   try {
-    await client.set('message', message);
+    await client.lPush('message', message);
     res.json({ status: 'Mensaje enviado a Redis' });
   } catch (err) {
     console.error('Error al enviar el mensaje a Redis:', err);
@@ -34,7 +34,7 @@ app.post('/send', async (req, res) => {
 // ruta para recibir mensajes
 app.get('/receive', async (req, res) => {
   try {
-    const message = await client.get('message');
+    const message = await client.rPop('message');
     res.json({ message });
   } catch (err) {
     console.error('Error al recibir el mensaje de Redis:', err);
