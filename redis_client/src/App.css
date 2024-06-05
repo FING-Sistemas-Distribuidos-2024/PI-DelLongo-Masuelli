@@ -19,8 +19,7 @@ body {
 }
 
 /* Add some spacing between elements */
-h1, e
-p {
+h1, p {
     margin-bottom: 10px;
 
 }
