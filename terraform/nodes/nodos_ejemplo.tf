@@ -24,7 +24,7 @@ resource "proxmox_vm_qemu" "nodo-profe" {
     sockets = 1
     vcpus = 0
     cpu = "host"
-    memory = 2048
+    memory = 4096
     scsihw = "virtio-scsi-pci"
     agent = 0
 
@@ -49,5 +49,6 @@ resource "proxmox_vm_qemu" "nodo-profe" {
     cipassword = var.cipassword
     sshkeys = <<EOF
     ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKt91pu7zfLvm6MrIuJwVNY2CKARFC+pwql8ufj9jZH6 micaeladellongo@gmail.com
+    ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ+uM/pDehbeHW7cWgX1cvJaLzvxVvRslqHKnycywLtD lucianomasuelli.lm@gmail.com
     EOF
 }
