@@ -6,26 +6,36 @@ function App() {
 	const [message, setMessage] = useState('');
 	const [receivedMessage, setReceivedMessage] = useState('');
 
-	const handleSendMessage = async () => {
+	const socket = new WebSocket("ws://localhost:9001");
+	socket.onopen = ({data}) => {
+		console.log('Conectado al servidor de websocket.');
+	};
+
+	socket.onmessage = ({data}) => {
+		handleReceiveMessage().then(r => console.log('Mensaje recibido:', r));
+	};
+
+	async function handleSendMessage() {
 		try {
 			// ip del backend
-			const response = await axios.post('http://10.230.50.4:5000/send', {message});
+			// const response = await axios.post('http://10.230.50.4:5000/send', {message});
+			const response = await axios.post('http://localhost:5000/send', {message});
 			alert(response.data.status);
 		} catch (error) {
 			console.error('Error sending message:', error);
-			alert('Error sending message.');
 		}
-	};
+	}
 
-	const handleReceiveMessage = async () => {
+	async function handleReceiveMessage() {
 		try {
-			const response = await axios.get('http://10.230.50.4:5000/receive');
-			setReceivedMessage(response.data.message);
+			// const response = await axios.get('http://10.230.50.4:5000/receive');
+			const response = await axios.get('http://localhost:5000/receive');
+			// Append the new message to the existing messages, separated by a newline
+			setReceivedMessage(prevMessages => `${prevMessages}\nReceived Message: ${response.data.message}`);
 		} catch (error) {
 			console.error('Error receiving message:', error);
-			alert('Error receiving message.');
 		}
-	};
+	}
 
 	return (
 		<div className="App">
@@ -35,7 +45,7 @@ function App() {
 					type="text"
 					value={message}
 					onChange={(e) => setMessage(e.target.value)}
-					placeholder="Enter your message"
+					placeholder="Enter your message."
 				/>
 				<button onClick={handleSendMessage}>Send Message</button>
 			</div>
