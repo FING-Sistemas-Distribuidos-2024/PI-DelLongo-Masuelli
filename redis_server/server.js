@@ -10,8 +10,8 @@ app.use(cors()); // Habilitar CORS
 // cliente de Redis
 const client = createClient({
 	// ip del servidor de redis
-	url: 'redis://10.230.50.2:6379'
-	//url: 'redis://localhost:6379'
+	//url: 'redis://10.230.50.2:6379'
+	url: 'redis://localhost:6379'
 });
 
 client.on('error', (err) => {
