@@ -1,41 +1,36 @@
-import React, {useState} from 'react';
 import axios from 'axios';
 import './App.css';
+import useWebSocket, { ReadyState } from 'react-use-websocket';
+import { useState, useCallback, useEffect } from 'react';
+
 
 function App() {
 	const [message, setMessage] = useState('');
+	const [user, setUser] = useState('');
 	const [receivedMessage, setReceivedMessage] = useState('');
+	const [socketUrl, setSocketUrl] = useState('ws://chatsv-clusterip:5000/');
 
-	const socket = new WebSocket("ws://localhost:9001");
-	socket.onopen = ({data}) => {
-		console.log('Conectado al servidor de websocket.');
-	};
+	const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+	const [messageHistory, setMessageHistory] = useState([]);
 
-	socket.onmessage = ({data}) => {
-		handleReceiveMessage().then(r => console.log('Mensaje recibido:', r));
-	};
+	const handleSendMessage = () => sendMessage(`${user}: ${message}`);
 
-	async function handleSendMessage() {
-		try {
-			// ip del backend
-			// const response = await axios.post('http://10.230.50.4:5000/send', {message});
-			const response = await axios.post('http://localhost:5000/send', {message});
-			alert(response.data.status);
-		} catch (error) {
-			console.error('Error sending message:', error);
-		}
+	const handleReceiveMessage = () => { };
+
+	const handleMessageInput = (e) => {
+		setMessage(e.target.value);
 	}
 
-	async function handleReceiveMessage() {
-		try {
-			// const response = await axios.get('http://10.230.50.4:5000/receive');
-			const response = await axios.get('http://localhost:5000/receive');
-			// Append the new message to the existing messages, separated by a newline
-			setReceivedMessage(prevMessages => `${prevMessages}\nReceived Message: ${response.data.message}`);
-		} catch (error) {
-			console.error('Error receiving message:', error);
-		}
+	const handleUserInput = (e) => {
+		setUser(e.target.value);
 	}
+
+	useEffect(() => {
+		if (lastMessage !== null) {
+			setMessageHistory((prev) => prev.concat(lastMessage));
+			console.log(lastMessage);
+		}
+	}, [lastMessage]);
 
 	return (
 		<div className="App">
@@ -43,19 +38,26 @@ function App() {
 			<div>
 				<input
 					type="text"
+					value={user}
+					onChange={handleUserInput}
+					placeholder="Type your name..."
+				/>
+				<input
+					type="text"
 					value={message}
-					onChange={(e) => setMessage(e.target.value)}
+					onChange={handleMessageInput}
 					placeholder="Enter your message."
 				/>
 				<button onClick={handleSendMessage}>Send Message</button>
 			</div>
 			<div>
-				<button onClick={handleReceiveMessage}>Receive Message</button>
-				<textarea
-					value={`Received Message: ${receivedMessage}`}
-					readOnly
-					style={{width: '100%', height: '200px'}}
-				/>
+				<div className='messages'>
+					{
+						messageHistory.map(message =>
+							<p>{message.data}</p>
+						)
+					}
+				</div>
 			</div>
 		</div>
 	);
