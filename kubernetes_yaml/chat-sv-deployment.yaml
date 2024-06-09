@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: chatsv-container
-          image: chat-sv:0.1
+          image: micakil/chat-sv:0.22
           ports:
             - containerPort: 5000
