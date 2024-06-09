@@ -53,8 +53,8 @@ function App() {
 			<div>
 				<div className='messages'>
 					{
-						messageHistory.map((i,message) =>
-							<p key={i}>{message.data}</p>
+						messageHistory.map((message) =>
+							<p>{message.data}</p>
 						)
 					}
 				</div>
