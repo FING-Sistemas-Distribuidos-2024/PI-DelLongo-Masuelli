@@ -69,5 +69,7 @@ Para construir el proyecto localmente, sigue estos pasos:
 3. Ejecuta `npm install` para instalar las dependencias.
 4. Ejecuta `npm start` para iniciar el servidor.
 
+## Cómo conectarse a la aplicación
+El cliente de la aplicación está disponible en http://10.230.50.2/
 
 
