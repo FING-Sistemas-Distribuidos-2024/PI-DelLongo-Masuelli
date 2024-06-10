@@ -5,7 +5,7 @@ metadata:
   labels:
     app: chatclient
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: chatclient
@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: chatclient-container
-          image: micakil/chat-client:0.2
+          image: micakil/chat-client:0.24
           ports:
             - containerPort: 80

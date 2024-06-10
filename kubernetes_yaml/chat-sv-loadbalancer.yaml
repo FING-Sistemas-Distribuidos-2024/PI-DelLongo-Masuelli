@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: chatsv-loadbalancer
+  name: chatsv-clusterip
   labels:
     app: chatsv
 spec:
   type: LoadBalancer
   ports:
     - port: 5000
-      targetPort: 5000
+      targetPort: 8080
       protocol: TCP
   selector:
     app: chatsv

@@ -50,3 +50,8 @@ button:hover {
     background-color: #0056b3;
 }
 
+.messages {
+    padding-top: 2rem;
+    min-height: 20px;
+    background-color: whitesmoke;
+}

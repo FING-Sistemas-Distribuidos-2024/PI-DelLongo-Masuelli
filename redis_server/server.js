@@ -1,50 +1,52 @@
-const express = require('express');  // permite hacer endpoint de http-rest 
-const bodyParser = require('body-parser');
-const cors = require('cors');  // cross origin resources 
-const {createClient} = require('redis');
+const redis = require("redis");
 
-const app = express();
-app.use(bodyParser.json());
-app.use(cors()); // Habilitar CORS
-
-// cliente de Redis
-const client = createClient({
-	// ip del servidor de redis
-	//url: 'redis://10.230.50.2:6379'
-	url: 'redis://localhost:6379'
+// Initilize redis client
+let client = redis.createClient({
+	url: 'redis://redis-clusterip:6379'
 });
 
-client.on('error', (err) => {
-	console.error('Redis error:', err);
-});
+client.on('error', err => console.log('Redis Client Error', err));
 
-// conectar el cliente de Redis
-client.connect().catch(console.error);
+client.connect();
 
-// ruta para enviar mensajes
-app.post('/send', async (req, res) => {
-	const message = req.body.message;
-	try {
-		await client.lPush('message', message);
-		res.json({status: 'Message sent to Redis.'});
-	} catch (err) {
-		console.error('Error sending message to Redis:', err);
-		res.status(500).json({status: 'Error sending message to Redis.'});
+// Initialize websocket server
+const WebSocketServer = require('ws');
+// Creating a new websocket server
+const wss = new WebSocketServer.Server({ port: 8080 })
+// Creating connection using websocket
+wss.on("connection", async ws => {
+	console.log("new client connected");
+	// When a client is connected, send all messages
+	let messages = []
+	await client.keys('*', (err, keys) => {
+		console.log("Retrieve all keys", keys);
+		keys.forEach((key) => {
+			client.get(key, function (err, message) {
+				messages.push(message)
+				console.log("key", key);
+			});
+		})
+	});
+
+	console.log("messages", messages);
+
+	//on message from client
+	ws.on("message", async data => {
+		console.log(`Client has sent us: ${data}`)
+
+		// Set timestamp as a key and user: message as value
+		await client.set(Date.now().toString(), data)
+		wss.clients.forEach((client) => {
+			client.send(`${data}`);
+		});
+	});
+	// handling what to do when clients disconnects from server
+	ws.on("close", () => {
+		console.log("the client has disconnected");
+	});
+	// handling client connection error
+	ws.onerror = function () {
+		console.log("Some Error occurred")
 	}
 });
-
-// ruta para recibir mensajes
-app.get('/receive', async (req, res) => {
-	try {
-		const message = await client.rPop('message');
-		res.json({message});
-	} catch (err) {
-		console.error('Error receiving message from Redis:', err);
-		res.status(500).json({status: 'Error receiving message from Redis.'});
-	}
-});
-
-// iniciar el servidor en el puerto 5000
-app.listen(5000, () => {
-	console.log('Server running at 5000.');
-});
+console.log("The WebSocket server is running on port 8080");
