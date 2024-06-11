@@ -13,7 +13,10 @@ function App() {
 	const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
 	const [messageHistory, setMessageHistory] = useState([]);
 
-	const handleSendMessage = () => sendMessage(`${user}: ${message}`);
+	const handleSendMessage = () => {
+		sendMessage(`${user}: ${message}`);
+		setMessage('');
+	}
 
 	const handleReceiveMessage = () => { };
 
@@ -22,6 +25,10 @@ function App() {
 	}
 
 	const handleUserInput = (e) => {
+		if (e.target.value === '') {
+			setUser('Anonymous');
+			return;
+		}
 		setUser(e.target.value);
 	}
 
@@ -40,7 +47,7 @@ function App() {
 					type="text"
 					value={user}
 					onChange={handleUserInput}
-					placeholder="Type your name..."
+					placeholder="Type your username."
 				/>
 				<input
 					type="text"
