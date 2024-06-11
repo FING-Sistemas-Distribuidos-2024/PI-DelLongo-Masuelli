@@ -23,10 +23,16 @@ body {
 }
 
 /* Add some spacing between elements */
-h1, p {
+h1 {
     margin-bottom: 5rem;
     text-align: center;
     margin-top: 2rem;
+}
+
+p {
+    margin-bottom: 1rem;
+    margin-left: 1rem;
+
 }
 
 button {
@@ -71,11 +77,9 @@ button:hover {
     background-color: seashell;
     border: 2px solid black;
     margin: 2rem;
-    height: 50vh;
+   
     border-radius: 10px;
     color: black;
-    text-align: left;
     box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.616);
-    align-self: flex-start;
 
 }
