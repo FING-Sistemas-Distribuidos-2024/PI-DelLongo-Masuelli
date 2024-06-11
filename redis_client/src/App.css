@@ -7,7 +7,11 @@
 
 /* Set a background color */
 body {
-    background-color: #f2f2f2;
+    background-image: linear-gradient(90deg, rgb(37, 0, 139), #044b96);
+    background-color: #007bff;
+    color: white;
+    margin-left: 10%;
+    margin-right: 10%;
 }
 
 /* Center the content */
@@ -20,8 +24,9 @@ body {
 
 /* Add some spacing between elements */
 h1, p {
-    margin-bottom: 10px;
-
+    margin-bottom: 5rem;
+    text-align: center;
+    margin-top: 2rem;
 }
 
 button {
@@ -31,10 +36,20 @@ button {
 /* Style form elements */
 input[type="text"],
 textarea {
-    width: 100%;
+    width: 50%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.usertext {
+    flex:auto;
+    align-content: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 50%;
 }
 
 button {
@@ -53,5 +68,14 @@ button:hover {
 .messages {
     padding-top: 2rem;
     min-height: 20px;
-    background-color: whitesmoke;
+    background-color: seashell;
+    border: 2px solid black;
+    margin: 2rem;
+    height: 50vh;
+    border-radius: 10px;
+    color: black;
+    text-align: left;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.616);
+    align-self: flex-start;
+
 }

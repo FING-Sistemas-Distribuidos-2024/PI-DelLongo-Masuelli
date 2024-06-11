@@ -37,7 +37,7 @@ function App() {
 	return (
 		<div className="App">
 			<h1>Redis Messaging App</h1>
-			<div>
+			<div className='usertext'>
 				<input
 					type="text"
 					value={user}
