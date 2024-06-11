@@ -99,7 +99,7 @@ docker push <user>/chat-sv:<tag>
 
 Para el cliente se hizo el proceso análogo en el directorio `redis_client` reemplazando `chat-sv` por `chat-client` en los comandos.
 
-### Despliegue en Kubernetes
+## Despliegue en Kubernetes
 
 Para desplegar la aplicación en Kubernetes, se crearon los archivos .yaml en el directorio `kubernetes_yaml`. Estos archivos contienen la configuración de los servicios, los deployments y los ingress de la aplicación.
 
