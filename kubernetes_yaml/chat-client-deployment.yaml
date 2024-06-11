@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: chatclient-container
-          image: micakil/chat-client:0.24
+          image: micakil/chat-client:0.25
           ports:
             - containerPort: 80

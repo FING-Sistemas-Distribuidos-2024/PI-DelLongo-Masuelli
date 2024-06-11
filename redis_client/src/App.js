@@ -22,6 +22,10 @@ function App() {
 	}
 
 	const handleUserInput = (e) => {
+		if (e.target.value === '') {
+			setUser('Anonymous');
+			return;
+		}
 		setUser(e.target.value);
 	}
 
@@ -40,7 +44,7 @@ function App() {
 					type="text"
 					value={user}
 					onChange={handleUserInput}
-					placeholder="Type your name..."
+					placeholder="Type your username..."
 				/>
 				<input
 					type="text"
