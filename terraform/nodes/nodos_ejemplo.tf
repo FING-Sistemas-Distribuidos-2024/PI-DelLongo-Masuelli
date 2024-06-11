@@ -1,6 +1,6 @@
 variable "cipassword"{
   type = string
-  default = "micalucho"
+  default = "password"
 }
 
 resource "proxmox_vm_qemu" "nodo-profe" {
