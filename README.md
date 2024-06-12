@@ -14,9 +14,9 @@ El servidor fue implementado utilizando `Node.js`, el archivo server.js es el pu
 
 **Cliente Redis**: Se crea una conexión con una instancia de Redis, que es una base de datos en memoria. Esta conexión se utiliza para almacenar y recuperar mensajes de chat. Los mensajes se almacenan con una clave única (la marca de tiempo del mensaje) y el valor es el mensaje en sí.
 
-**Servidor WebSocket**: Se crea un servidor WebSocket que escucha en el puerto 8000. Cuando un cliente se conecta, se recuperan todos los mensajes de la base de datos Redis y se envían al cliente.
+**Servidor WebSocket**: Se crea un servidor WebSocket que escucha en el puerto 8080. Cuando un cliente se conecta, se recuperan los últimos 10 mensajes del historial y se envían al cliente. Además, se manejan los eventos de conexión y desconexión de los clientes.
 
-**Manejo de mensajes**: Cuando un cliente envía un mensaje, este se almacena en Redis y luego se retransmite a todos los clientes conectados.
+**Manejo de mensajes**: Cuando un cliente envía un mensaje, este se almacena en Redis con una clave única. Luego, se envía el mensaje a todos los clientes conectados. En una lista Redis, se almacenan las claves de los últimos 10 mensajes enviados.
 
 ## Cliente
 
@@ -28,9 +28,9 @@ Utilizando React se implementó el cliente de la aplicación, donde `App.js` es 
 
 **Manejo de mensajes**: Se definen funciones para manejar los mensajes. `handleSendMessage` se utiliza para enviar un mensaje y `handleMessageInput` se utiliza para actualizar el estado message cuando el usuario escribe un mensaje.
 
-**Manejo de usuarios**: `handleUserInput` se utiliza para actualizar el estado user cuando el usuario introduce su nombre.
+**Manejo de usuarios**: `handleUserInput` se utiliza para actualizar el estado `user` cuando el usuario introduce su nombre.
 
-**useEffect**: Se utiliza el hook `useEffect` para actualizar el historial de mensajes cada vez que se recibe un nuevo mensaje.
+**useEffect**: Se utiliza el hook `useEffect` para actualizar el historial de mensajes cada vez que se recibe un nuevo mensaje. Primero, se trata de parsear el mensaje recibido, ya que si es un Array, se trata de un mensaje de historial. Si es un string, se trata de un mensaje normal.
 
 **Renderizado**: En la función de renderizado, se muestran dos campos de entrada para el nombre del usuario y el mensaje, y se manejan sus eventos `onChange` para actualizar los estados correspondientes.
 
@@ -139,7 +139,8 @@ Para construir el proyecto en Kubernetes, se pueden seguir los siguientes pasos:
 # Limitaciones y Decisiones de Implementación
 
 - No se controla si el nombre de usuario ya está en uso.
-- Los mensajes solo persisten en el navegador del usuario. Es decir, si un usuario cierra la pestaña del navegador, los mensajes se pierden.
+- Se guardan todos los mensajes en Redis, con una clave única (la marca de tiempo del mensaje). Sin embargo so se muestran los últimos 10 mensajes anteriores.
+  - Una posible mejora sería eliminar los mensajes más antiguos para evitar que la base de datos crezca indefinidamente.
 - Solo es posible replicar el cliente, pero no el servidor. Esto se debe al uso de websockets para mostrar los mensajes en tiempo real.
   - Si se hubiera replicado el servidor, habría sido necesario implementar un mecanismo de comunicación entre los servidores para mantener la coherencia de los mensajes.
   - Ya que, al duplicarse, se duplicarían los websockets. Por lo tanto, los clientes se conectarían a diferentes websockets y no recibirían los mensajes de los clientes conectados a otro websocket.

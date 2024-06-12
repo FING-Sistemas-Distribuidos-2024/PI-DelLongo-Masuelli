@@ -1,18 +1,32 @@
+/**
+ * Importing necessary modules and hooks
+ * 'react-use-websocket' is a custom React Hook that provides a WebSocket client
+ * 'useState' and 'useEffect' are built-in React hooks
+ */
 import './App.css';
 import useWebSocket from 'react-use-websocket';
 import {useEffect, useState} from 'react';
 
-
+/**
+ * Main function component of the application
+ */
 function App() {
+	// State variables for the user's message, username, received message, and message history
 	const [message, setMessage] = useState('');
 	const [user, setUser] = useState('');
 	const [receivedMessage, setReceivedMessage] = useState('');
-	// const [socketUrl, setSocketUrl] = useState('ws://localhost:5000/');
 	const [socketUrl, setSocketUrl] = useState('ws://10.230.50.3:5000/');
 
+	// WebSocket hook for sending messages and handling the connection state
 	const {sendMessage, lastMessage, readyState} = useWebSocket(socketUrl);
+
+	// State variable for storing the history of messages
 	const [messageHistory, setMessageHistory] = useState([]);
 
+	/**
+	 * Function to handle sending of messages
+	 * If the user is anonymous, prepend 'Anonymous' to the message
+	 */
 	const handleSendMessage = () => {
 		if (user === '') {
 			sendMessage(`Anonymous: ${message}`);
@@ -21,6 +35,7 @@ function App() {
 		sendMessage(`${user}: ${message}`);
 	}
 
+	// Event handlers for updating state variables based on user input
 	const handleMessageInput = (e) => {
 		setMessage(e.target.value);
 	}
@@ -33,6 +48,10 @@ function App() {
 		setReceivedMessage(e.target.value);
 	}
 
+	/**
+	 * useEffect hook to handle incoming messages
+	 * If the last message is not null, it is added to the message history
+	 */
 	useEffect(() => {
 		let is_array = false
 		let msg;
@@ -49,6 +68,7 @@ function App() {
 
 	}, [lastMessage]);
 
+	// Rendering the application
 	return (
 		<div className="App">
 			<h1>Redis Messaging App</h1>

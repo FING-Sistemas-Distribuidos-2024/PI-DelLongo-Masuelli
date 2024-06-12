@@ -1,18 +1,42 @@
+/**
+ * Importing necessary modules
+ * 'redis' is used for interacting with a Redis database
+ * 'ws' is used for creating a WebSocket server
+ */
 const redis = require("redis");
 const WebSocketServer = require('ws');
 
+/**
+ * Creating a Redis client and connecting to a Redis server
+ * The URL of the Redis server is specified in the 'url' property
+ */
 let client = redis.createClient({
 	// url: 'redis://localhost:6379'
 	url: 'redis://redis-clusterip:6379'
 });
 let port = 8080;
 
+/**
+ * Handling Redis client errors
+ */
 client.on('error', err => console.log('Redis client error.', err));
+
+/**
+ * Connecting the Redis client
+ */
 client.connect();
+
+/**
+ * Creating a WebSocket server that listens on a specified port
+ */
 const wss = new WebSocketServer.Server({port: port})
 // const wss = new WebSocketServer.Server({ port: 8080 })
 
-// retrieve ten latest messages
+/**
+ * Function to retrieve the ten latest messages from the Redis database
+ * It uses the 'lRange' method to get the keys of the latest messages
+ * Then retrieves each message using the 'get' method
+ */
 const retrieveLatestMessages = async () => {
 	let keys = await client.lRange("keys", 0, 9);
 	let messages = [];
@@ -27,6 +51,10 @@ const retrieveLatestMessages = async () => {
 	return messages;
 }
 
+/**
+ * Handling new client connections to the WebSocket server
+ * When a new client connects, the server retrieves the latest messages and sends them to the client
+ */
 wss.on("connection", async ws => {
 	console.log("New client connected.");
 
@@ -36,7 +64,12 @@ wss.on("connection", async ws => {
 	}
 	await sendHistory();
 
-	//on message from client
+	/**
+	 * Handling incoming messages from a client
+	 * When the server receives a message from a client, it stores the message in the Redis database with a timestamp as the key
+	 * It also updates the list of keys to keep only the ten latest keys
+	 * Then, the server sends the received message to all connected clients
+	 */
 	ws.on("message", async data => {
 		console.log(`Client has sent: ${data}`)
 
@@ -50,12 +83,16 @@ wss.on("connection", async ws => {
 		});
 	});
 
-	// handle client disconnect
+	/**
+	 * Handling client disconnection
+	 */
 	ws.on("close", () => {
 		console.log("WS: The client has disconnected.");
 	});
 
-	// handle errors
+	/**
+	 * Handling errors
+	 */
 	ws.onerror = function () {
 		console.log("WS: Some error occurred.")
 	}
