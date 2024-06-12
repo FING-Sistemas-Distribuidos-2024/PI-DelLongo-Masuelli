@@ -15,7 +15,7 @@ function App() {
 	const [message, setMessage] = useState('');
 	const [user, setUser] = useState('');
 	const [receivedMessage, setReceivedMessage] = useState('');
-	const [socketUrl, setSocketUrl] = useState('ws://10.230.50.3:5000/');
+	const [socketUrl, setSocketUrl] = useState('ws://10.230.50.4:5000/');  // server IP
 
 	// WebSocket hook for sending messages and handling the connection state
 	const {sendMessage, lastMessage, readyState} = useWebSocket(socketUrl);

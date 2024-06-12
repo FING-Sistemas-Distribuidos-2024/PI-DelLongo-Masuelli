@@ -12,7 +12,7 @@ const WebSocketServer = require('ws');
  */
 let client = redis.createClient({
 	// url: 'redis://localhost:6379'
-	url: 'redis://redis-clusterip:6379'
+	url: 'redis://redis-clusterip:6379'  // redis-clusterip is the service name of the Redis cluster
 });
 let port = 8080;
 
