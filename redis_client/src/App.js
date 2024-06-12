@@ -7,8 +7,8 @@ function App() {
 	const [message, setMessage] = useState('');
 	const [user, setUser] = useState('');
 	const [receivedMessage, setReceivedMessage] = useState('');
-	const [socketUrl, setSocketUrl] = useState('ws://localhost:5000/');
-	// const [socketUrl, setSocketUrl] = useState('ws://10.230.50.3:5000/');
+	// const [socketUrl, setSocketUrl] = useState('ws://localhost:5000/');
+	const [socketUrl, setSocketUrl] = useState('ws://10.230.50.3:5000/');
 
 	const {sendMessage, lastMessage, readyState} = useWebSocket(socketUrl);
 	const [messageHistory, setMessageHistory] = useState([]);

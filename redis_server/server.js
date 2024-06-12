@@ -2,10 +2,10 @@ const redis = require("redis");
 const WebSocketServer = require('ws');
 
 let client = redis.createClient({
-	url: 'redis://localhost:6379'
-	// url: 'redis://redis-clusterip:6379'
+	// url: 'redis://localhost:6379'
+	url: 'redis://redis-clusterip:6379'
 });
-let port = 5000;
+let port = 8080;
 
 client.on('error', err => console.log('Redis client error.', err));
 client.connect();
