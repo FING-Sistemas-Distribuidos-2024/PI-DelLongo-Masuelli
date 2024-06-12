@@ -1,42 +1,52 @@
-import axios from 'axios';
 import './App.css';
-import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { useState, useCallback, useEffect } from 'react';
+import useWebSocket from 'react-use-websocket';
+import {useEffect, useState} from 'react';
 
 
 function App() {
 	const [message, setMessage] = useState('');
 	const [user, setUser] = useState('');
 	const [receivedMessage, setReceivedMessage] = useState('');
-	const [socketUrl, setSocketUrl] = useState('ws://10.230.50.3:5000/');
+	const [socketUrl, setSocketUrl] = useState('ws://localhost:5000/');
+	// const [socketUrl, setSocketUrl] = useState('ws://10.230.50.3:5000/');
 
-	const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+	const {sendMessage, lastMessage, readyState} = useWebSocket(socketUrl);
 	const [messageHistory, setMessageHistory] = useState([]);
 
 	const handleSendMessage = () => {
+		if (user === '') {
+			sendMessage(`Anonymous: ${message}`);
+			return;
+		}
 		sendMessage(`${user}: ${message}`);
-		setMessage('');
 	}
-
-	const handleReceiveMessage = () => { };
 
 	const handleMessageInput = (e) => {
 		setMessage(e.target.value);
 	}
 
 	const handleUserInput = (e) => {
-		if (e.target.value === '') {
-			setUser('Anonymous');
-			return;
-		}
 		setUser(e.target.value);
 	}
 
+	const handleReceivedMessage = (e) => {
+		setReceivedMessage(e.target.value);
+	}
+
 	useEffect(() => {
+		let is_array = false
+		let msg;
 		if (lastMessage !== null) {
-			setMessageHistory((prev) => prev.concat(lastMessage));
-			console.log(lastMessage);
+			console.log("Last message: ", lastMessage.data);
+			try {
+				msg = JSON.parse(lastMessage.data);
+				setMessageHistory((prev) => prev.concat(msg));
+			} catch (e) {
+				setMessageHistory((prev) => prev.concat(lastMessage.data));
+			}
 		}
+		console.log("messageHistory", messageHistory);
+
 	}, [lastMessage]);
 
 	return (
@@ -53,7 +63,7 @@ function App() {
 					type="text"
 					value={message}
 					onChange={handleMessageInput}
-					placeholder="Enter your message."
+					placeholder="Type your message."
 				/>
 				<button onClick={handleSendMessage}>Send Message</button>
 			</div>
@@ -61,7 +71,7 @@ function App() {
 				<div className='messages'>
 					{
 						messageHistory.map((message) =>
-							<p>{message.data}</p>
+							<p>{message}</p>
 						)
 					}
 				</div>
