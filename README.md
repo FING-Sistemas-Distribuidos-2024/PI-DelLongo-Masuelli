@@ -112,7 +112,7 @@ Tras ejecutar el comando anterior (y esperar un tiempo) fue posible acceder a la
 
 # Cómo Conectarse a la Aplicación
 
-Para conectarse a la aplicación es necesario pertenecer a la VPN de ZeroTier de la cátedra (`network id: 159924d630305675`). Se puede acceder a la aplicación en el siguiente [enlace](http://10.230.50.4/).
+Para conectarse a la aplicación es necesario pertenecer a la VPN de ZeroTier de la cátedra (`network id: 159924d630305675`). Se puede acceder a la aplicación en el siguiente [enlace](http://10.230.50.3/).
 
 # Cómo Desplegar el Proyecto
 

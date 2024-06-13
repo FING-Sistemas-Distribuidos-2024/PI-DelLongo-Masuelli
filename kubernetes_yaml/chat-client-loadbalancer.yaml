@@ -4,6 +4,8 @@ metadata:
   name: chatclient-loadbalancer
   labels:
     app: chatclient
+#  annotations:
+#    metallb.universe.tf/loadBalancerIP: 10.230.50.2
 spec:
   type: LoadBalancer
   ports:
@@ -12,3 +14,4 @@ spec:
       protocol: TCP
   selector:
     app: chatclient
+#  loadBalancerIP: 10.230.50.2

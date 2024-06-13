@@ -4,6 +4,8 @@ metadata:
   name: chatsv-clusterip
   labels:
     app: chatsv
+  annotations:
+    metallb.universe.tf/loadBalancerIP: 10.230.50.4
 spec:
   type: LoadBalancer
   ports:
@@ -12,3 +14,4 @@ spec:
       protocol: TCP
   selector:
     app: chatsv
+  loadBalancerIP: 10.230.50.4
